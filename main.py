@@ -64,10 +64,10 @@ class MainHandler(webapp2.RequestHandler):
             emailError = "not a valid email address"
 
         content = """<form method="post" action="/SignUp">"""
-        content += """<br>Username:<input type="text" name="username"></input></br>""" + userNameError
-        content += """<br>Password:<input type="password" name ="password"></input></br>""" + passwordError
-        content += """<br>Repeat Password:<input type="password" name="password2"></input></br>""" + passwordMatchError
-        content += """<br>Email: <input type="text" name="email"></input></br>""" + emailError
+        content += """<br>Username:<input type="text" name="username"></input>""" + userNameError + """</br>"""
+        content += """<br>Password:<input type="password" name ="password"></input>""" + passwordError + """</br>"""
+        content += """<br>Repeat Password:<input type="password" name="password2"></input>""" + passwordMatchError + """</br>"""
+        content += """<br>Email: <input type="text" name="email"></input>""" + emailError + """</br>"""
         content += """<input type="submit" value="SignUp"/>"""
         content += """</form>"""
         self.response.write(content)
