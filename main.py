@@ -53,6 +53,8 @@ class MainHandler(webapp2.RequestHandler):
         emailError = ""
 
         error = self.request.get("error")
+        username = cgi.escape(self.request.get("username"))
+        email = cgi.escape(self.request.get("email"))
 
         if error == "username":
             userNameError = "Usernames must be 3-20 letter long, alpha numeric - _"
@@ -63,34 +65,34 @@ class MainHandler(webapp2.RequestHandler):
         elif error == "email":
             emailError = "not a valid email address"
 
-        content = """<form method="post" action="/SignUp">"""
-        content += """<br>Username:<input type="text" name="username"></input>""" + userNameError + """</br>"""
-        content += """<br>Password:<input type="password" name ="password"></input>""" + passwordError + """</br>"""
-        content += """<br>Repeat Password:<input type="password" name="password2"></input>""" + passwordMatchError + """</br>"""
-        content += """<br>Email: <input type="text" name="email"></input>""" + emailError + """</br>"""
-        content += """<input type="submit" value="SignUp"/>"""
-        content += """</form>"""
+        content = '<form method="post" action="/SignUp">'
+        content += '<br>Username:<input type="text" name="username" value="'+username+ '"></input>' + userNameError + '</br>'
+        content += '<br>Password:<input type="password" name ="password"></input>' + passwordError + '</br>'
+        content += '<br>Repeat Password:<input type="password" name="password2"></input>' + passwordMatchError + '</br>'
+        content += '<br>Email: <input type="text" name="email" value="'+email+'"></input>' + emailError + '</br>'
+        content += '<input type="submit" value="SignUp"/>'
+        content += '</form>'
         self.response.write(content)
 
 
 class SignUpHandler(webapp2.RequestHandler):
     def post(self):
-        # look inside the request to figure out what the user typed
+
         username = cgi.escape(self.request.get("username"))
         password = cgi.escape(self.request.get("password"))
         password2 = cgi.escape(self.request.get("password2"))
         email = cgi.escape(self.request.get("email"))
 
         if (checkUsername(username) == False):
-            self.redirect('/?error=username')
+            self.redirect('/?error=username&username=' + username +'&email='+ email +'')
         elif (checkPassword(password) == False):
-            self.redirect('/?error=password')
+            self.redirect('/?error=password&username=' + username +'&email='+ email +'')
         elif (checkPasswordMatch(password,password2) == False):
-            self.redirect('/?error=passwordmatch')
+            self.redirect('/?error=passwordmatch&username=' + username +'&email='+ email +'')
         elif (checkEmail(email) == False):
-            self.redirect('/?error=email')
+            self.redirect('/?error=email&username=' + username +'&email='+ email +'')
         else:
-            content = """<h1>Welcome""" + username + """</h1>"""
+            content = '<h1>Welcome' + username + '</h1>'
             self.response.write(content)
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
